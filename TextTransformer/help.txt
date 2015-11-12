@@ -1,0 +1,78 @@
+﻿Product:        RexReplace v1.0
+Description:    A simple text transformation tool based on regular expression matching and text replacement with limited text transformation expression support.
+Author:         Hanyang Zhang
+Email:          zhanghanyang2002@gmail.com
+Release Date:   09/Aug/2014
+Liscense:       GPLv3
+Disclaimer:     The author is not responsible for loss incurred due to use of this software.
+
+Concept
+==============
+A rule set is simply a list of rules. The soure text is first transfromed by the first rule, and the result of which is then transformed by the second rule, and so on.
+Each rule has 4 parts:
+1. An Regular Expression, which is used to capture a list of matches in the input text.
+2. An order method that specifies how the matches will be reordered, e.g. reverse order.
+3. A replace template text that specifies how each match should be replaced.
+4. Options; such as Regular Expression settings and whether to include unmatched text in the result (true by default).
+
+Match Reordering
+==============
+To perform sorting (reorder matches) in a rule, put the capture group number in the ""Sorting"" box and select a sorting method at the bottom of context menu.
+- ""Sort as number"":<order by number part><then by rest as string>
+- ""Sort as datetime"":the match group value must be a date time as interpreted by the current culture, if not it will be appended at the end of the sorted list.
+
+Replace Template
+==============
+Use '{0}' to refer to the whole match occurance, and '{1}' for the first regex match group (as defined by '()'), and '{2}' the second group and so on.
+You can use certain functions in the template, which has the following format:
+{FuncName parm1, parm2, ...}
+You can nest functions.
+Currently the supported funtions are:
+matchCount
+matchId
+neg
+sum
+mul
+div
+toUpper
+toLower
+toUpperFirstChar
+toLowerFirstChar
+substring
+indexOf
+length
+trim
+trimStart
+trimEnd
+if (not shortcircuiting)
+equal
+concat
+replace
+asInt (this is provided to perform truncating)
+asBool (internally there are 3 datatypes: string, bool and double. The conversion depends on the function)
+asDouble
+not
+calc (refer to zcl.Calculator help)
+rand
+
+Tips
+==============
+To match by line, please use Multiline option in conjunction with '$'.
+
+Shortcuts
+==============
+Ctrl + A, Ctrl + D and Ctrl + R. You can figure it out..
+
+About the icon
+==============
+The application icon file (png) is selected from the fatcow-hosting-icons-3000, which are free for none-commercial use.
+The icon is converted from png to ico at:
+http://converticon.com/
+
+Limitation
+==============
+Can't find a way to handle "(...)+" type of capture group, only the last occurance is avaliable in the replace context. E.g.
+source text: 1234567
+regex: (\d)+
+Then the value of capture group 1 ({1}) will be "7" but there is no way to access the preceeding 6 captures in the group.
+Haven't figured out a way to solve this...

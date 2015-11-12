@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="RexReplace.GUI.UserControls.RuleBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"
+             xmlns:local="clr-namespace:RexReplace.GUI.UserControls"
+             BorderThickness="1" BorderBrush="Black" Margin="2" MinWidth="230" d:DesignHeight="144" d:DesignWidth="230"
+             x:Name="ruleControl"
+             >
+    <Grid Background="#125e8b" Margin="5">
+        <Grid.Resources>
+            <Style x:Key="labeltext" TargetType="{x:Type TextBlock}">
+                <Setter Property="Margin" Value="2"></Setter>
+                <Setter Property="Foreground" Value="#ffeeeeee"></Setter>
+             </Style>
+            <Style x:Key="ruletextbox" TargetType="{x:Type TextBox}">
+               
+            </Style>
+
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition  Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock Style="{StaticResource labeltext}" x:Name="mtext" Grid.Row="0">Match 1:</TextBlock>
+        <TextBox Style="{StaticResource ruletextbox}" x:Name="mbox"  Grid.Row="1" ToolTip="Must be a valid Regular Expression"></TextBox>
+        <TextBlock Style="{StaticResource labeltext}" x:Name="stext" Grid.Row="2"> Substitute 1:
+        </TextBlock>
+        <TextBox Style="{StaticResource ruletextbox}" AcceptsReturn="True" AcceptsTab="True" x:Name="sbox"  Grid.Row="3"></TextBox>
+
+        <TextBlock Style="{StaticResource labeltext}" x:Name="sortingtext" Grid.Row="4"> Soring 1:
+        </TextBlock>
+        <TextBox Style="{StaticResource ruletextbox}" x:Name="sortingbox" Grid.Row="5" Text="0" ToolTip="Must be a non-negative integer">
+        </TextBox>
+
+    </Grid>
+</UserControl>

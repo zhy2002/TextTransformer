@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A920958A-044F-4CCC-9C52-E924B56F19F0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZCL.RTScript</RootNamespace>
+    <AssemblyName>ZCL.RTScript</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbstractionLayer\IRTEntry.cs" />
+    <Compile Include="AbstractionLayer\IRTExpression.cs" />
+    <Compile Include="AbstractionLayer\IRTFunction.cs" />
+    <Compile Include="AbstractionLayer\IRTInterpreter.cs" />
+    <Compile Include="AbstractionLayer\IRTMatch.cs" />
+    <Compile Include="AbstractionLayer\IRTMatcher.cs" />
+    <Compile Include="AbstractionLayer\IRTMatchList.cs" />
+    <Compile Include="AbstractionLayer\IRTMerger.cs" />
+    <Compile Include="AbstractionLayer\IRTMetadataFactory.cs" />
+    <Compile Include="AbstractionLayer\IRTTemplate.cs" />
+    <Compile Include="DataModel\BaseRTMatch.cs" />
+    <Compile Include="DataModel\BaseRTMatchList.cs" />
+    <Compile Include="DataModel\CaptureRTMatch.cs" />
+    <Compile Include="DataModel\CaptureRTMatchList.cs" />
+    <Compile Include="DataModel\GroupRTMatch.cs" />
+    <Compile Include="DataModel\GroupRTMatchList.cs" />
+    <Compile Include="DataModel\RTEntry.cs" />
+    <Compile Include="ErrorMessages.Designer.cs" />
+    <Compile Include="IMatch.cs" />
+    <Compile Include="IMatcher.cs" />
+    <Compile Include="Logic\Execution\RTConverter.cs" />
+    <Compile Include="Logic\Execution\RTExecutionContext.cs" />
+    <Compile Include="Logic\Execution\RTExecutionError.cs" />
+    <Compile Include="Logic\Execution\RTPostContext.cs" />
+    <Compile Include="Logic\Execution\RTScope.cs" />
+    <Compile Include="Logic\Execution\RTTemplateContext.cs" />
+    <Compile Include="Logic\Execution\RTVariable.cs" />
+    <Compile Include="Logic\Execution\RTVoid.cs" />
+    <Compile Include="Logic\Expression\Literal\IReplaceContext.cs" />
+    <Compile Include="Logic\Expression\Literal\ReplaceException.cs" />
+    <Compile Include="Logic\Expression\Literal\ReplaceExpression.cs" />
+    <Compile Include="Logic\Expression\Literal\ReplaceOp.cs" />
+    <Compile Include="Logic\Expression\RTExpression.cs" />
+    <Compile Include="Logic\Expression\RTExpressionList.cs" />
+    <Compile Include="Logic\Expression\RTFunction.cs" />
+    <Compile Include="Logic\Expression\RTFunctionList.cs" />
+    <Compile Include="Logic\Expression\RTLiteral.cs" />
+    <Compile Include="Logic\Expression\RTParsingContext.cs" />
+    <Compile Include="Logic\Expression\RTParsingError.cs" />
+    <Compile Include="Logic\Expression\RTSysSymbols.cs" />
+    <Compile Include="Logic\MatchOptions.cs" />
+    <Compile Include="Logic\MergeOptions.cs" />
+    <Compile Include="Logic\Metadata\BaseMetadataFactory.cs" />
+    <Compile Include="Logic\Metadata\PostMetadataFactory.cs" />
+    <Compile Include="Logic\Metadata\RTFuncApply.cs" />
+    <Compile Include="Logic\Metadata\RTFuncDef.cs" />
+    <Compile Include="Logic\Metadata\RTFuncFor.cs" />
+    <Compile Include="Logic\Metadata\RTFuncGet.cs" />
+    <Compile Include="Logic\Metadata\RTFuncIf.cs" />
+    <Compile Include="Logic\Metadata\RTFuncItemCount.cs" />
+    <Compile Include="Logic\Metadata\RTFuncMerge.cs" />
+    <Compile Include="Logic\Metadata\RTFuncScope.cs" />
+    <Compile Include="Logic\Metadata\RTFuncSet.cs" />
+    <Compile Include="Logic\Metadata\RTLibFuncAdd.cs" />
+    <Compile Include="Logic\Metadata\RTLibFuncEqual.cs" />
+    <Compile Include="Logic\Metadata\RTLibFuncGreater.cs" />
+    <Compile Include="Logic\Metadata\RTLibFuncGreaterEqual.cs" />
+    <Compile Include="Logic\Metadata\RTLibFuncLess.cs" />
+    <Compile Include="Logic\Metadata\RTLibFuncLessEqual.cs" />
+    <Compile Include="Logic\Metadata\RTLibFuncMul.cs" />
+    <Compile Include="Logic\Metadata\RTLibFuncNotEqual.cs" />
+    <Compile Include="Logic\Metadata\RTLibFuncResidueIs.cs" />
+    <Compile Include="Logic\Metadata\RTLibMetadata.cs" />
+    <Compile Include="Logic\Metadata\TemplateMetadataFactory.cs" />
+    <Compile Include="Logic\RTMatcher.cs" />
+    <Compile Include="Logic\RTMerger.cs" />
+    <Compile Include="Logic\RTRule.cs" />
+    <Compile Include="Logic\RTTemplate.cs" />
+    <Compile Include="Logic\TemplateOptions.cs" />
+    <Compile Include="MatchType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RTErrorCode.cs" />
+    <Compile Include="RTExecutionException.cs" />
+    <Compile Include="RTMetadata.cs" />
+    <Compile Include="RTParsingException.cs" />
+    <Compile Include="RTRuleData.cs" />
+    <Compile Include="RTRuleSet.cs" />
+    <Compile Include="RuleOptions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZCL.Calculator\ZCL.Calculator.csproj">
+      <Project>{2b52bb04-9002-469b-96da-d583097eac4f}</Project>
+      <Name>ZCL.Calculator</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ErrorMessages.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="RTTemplateSpec.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

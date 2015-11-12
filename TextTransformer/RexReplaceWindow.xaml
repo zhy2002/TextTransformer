@@ -1,0 +1,163 @@
+﻿<Window x:Class="RexReplace.GUI.RexReplaceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:uc="clr-namespace:RexReplace.GUI.UserControls"
+        xmlns:local="clr-namespace:RexReplace.GUI"
+        xmlns:reg="clr-namespace:System.Text.RegularExpressions;assembly=System"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
+        Title="RexRepalce 1.0" 
+        Icon="rexreplace.ico" 
+        mc:Ignorable="d"  
+        d:DesignHeight="600" 
+        MinHeight="600" 
+        d:DesignWidth="800">
+    <Window.Resources>
+
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Margin" Value="3" ></Setter>
+            <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource Self},  Path=Command.Text}"></Setter>
+            <Setter Property="Width" Value="60"></Setter>
+            <Setter Property="Height" Value="24"></Setter>
+        </Style>
+
+        <Style x:Key="commontext" TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="5 2"></Setter>
+            <Setter Property="AcceptsReturn" Value="True"></Setter>
+            <Setter Property="Background" Value="#fefefe"></Setter>
+            <Setter Property="Foreground" Value="Black"></Setter>
+        </Style>
+
+        <Style x:Key="errortext" TargetType="{x:Type TextBox}" BasedOn="{StaticResource commontext}">
+            <Setter Property="BorderBrush" Value="Red">
+            </Setter>
+            <Setter Property="BorderThickness" Value="2"></Setter>
+        </Style>
+
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="VerticalAlignment" Value="Bottom"></Setter>
+            <Setter Property="Margin" Value="5 2"></Setter>
+            <Setter Property="Foreground" Value="#eeeeee"></Setter>
+            <Setter Property="FontFamily" Value="Arial"></Setter>
+        </Style>
+
+        <Style x:Key="helptext" TargetType="{x:Type TextBlock}">
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="Margin" Value="5,2,0,2"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+            <Setter Property="Width" Value="185"></Setter>
+        </Style>
+
+        <Style x:Key="statustext" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily" Value="Courier New"></Setter>
+            <Setter Property="FontSize" Value="10"></Setter>
+            <Setter Property="Foreground" Value="#FF8DCD32"></Setter>
+        </Style>
+
+        <Style TargetType="{x:Type Hyperlink}">
+            <Setter Property="Foreground" Value="#FFEEEEEE"></Setter>
+            <Setter Property="FontFamily" Value="Arial"></Setter>
+        </Style>
+        
+        <ObjectDataProvider  x:Key="sortingOptions" ObjectType="{x:Type sys:Enum}" MethodName="GetValues" >
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="uc:SortingOptions" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        
+        <uc:EnumDescriptionConverter x:Key="enumConverter" ></uc:EnumDescriptionConverter>
+    </Window.Resources>
+    
+    <Window.CommandBindings>
+        <CommandBinding x:Name="AddRuleCmdBinding" Command="{x:Static local:RexReplaceCommands.AddRule}" CanExecute="AddRuleCmdBinding_CanExecute" Executed="AddRuleCmdBinding_Executed" ></CommandBinding>
+        <CommandBinding x:Name="DeleteRuleCmdBinding" Command="{x:Static local:RexReplaceCommands.DeleteRule}" CanExecute="DeleteRuleCmdBinding_CanExecute" Executed="DeleteRuleCmdBinding_Executed"></CommandBinding>
+        <CommandBinding x:Name="RunCmdBinding" Command="{x:Static local:RexReplaceCommands.Run}" CanExecute="RunCmdBinding_CanExecute" Executed="RunCmdBinding_Executed"></CommandBinding>
+    </Window.CommandBindings>
+    
+    <Window.Background>
+        <SolidColorBrush Color="#1570A6"></SolidColorBrush>
+    </Window.Background>
+    
+    <Grid Margin="3 6 3 5" MinHeight="480">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="350"  ></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition MinWidth="250" ></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" >Source:</TextBlock>
+            <DockPanel Grid.Row="1" LastChildFill="True">
+                <TextBlock x:Name="lblStatus" DockPanel.Dock="Bottom" Style="{StaticResource statustext}" Margin="5,2,5,7" />
+                <TextBox x:Name="srcbox" Style="{StaticResource commontext}" AcceptsTab="True" AcceptsReturn="True" SelectionChanged="srcbox_SelectionChanged" ></TextBox>
+            </DockPanel>
+
+            <TextBlock Grid.Row="2">Rules:</TextBlock>
+            <ListView x:Name="RuleList" Grid.Row="3" Margin="5 2" Background="#ddeeee" ContextMenuOpening="ctxMenu_ContextMenuOpening" ContextMenuClosing="ctxMenu_ContextMenuClosing" BorderBrush="#FF3D424B" BorderThickness="2">
+                <ListView.ContextMenu>
+                    <ContextMenu x:Name="ctxMenu">
+                        <MenuItem Header="Culture Invariant" Tag="CultureInvariant" IsCheckable="True"></MenuItem>
+                        <MenuItem Header="Ignore Case" Tag="IgnoreCase" IsCheckable="True"></MenuItem>
+                        <MenuItem Header="Ignore Pattern Whitespace" Tag="IgnorePatternWhitespace" IsCheckable="True"></MenuItem>
+                        <MenuItem Header="Multiline" Tag="Multiline" IsCheckable="True"></MenuItem>
+                        <MenuItem Header="Singleline" Tag="Singleline" IsCheckable="True"></MenuItem>
+                        <MenuItem Header="ECMAScript" Tag="ECMAScript" IsCheckable="True"></MenuItem>
+                        <MenuItem x:Name="miSave" Header="Save Rules" Click="MenuItem_Click"></MenuItem>
+                        <MenuItem x:Name="miLoad" Header="Load Rules" Click="MenuItem_Click"></MenuItem>
+                        <MenuItem x:Name="miDiscard" Header="Discard Un-matched Text" IsCheckable="True"></MenuItem>
+                        <MenuItem x:Name="miSorting" >
+                            <MenuItem.Header>
+                                <ComboBox x:Name="cbSorting" Foreground="Black" SelectedIndex="0"  ItemsSource="{Binding   Source={StaticResource sortingOptions}}" SelectionChanged="cbSorting_SelectionChanged">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </MenuItem.Header>
+                        </MenuItem>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                        </StackPanel>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+            
+            <TextBlock Grid.Row="4" Style="{StaticResource helptext}" >
+                <Hyperlink NavigateUri="http://deerchao.net/tutorials/regex/regex.htm" RequestNavigate="hlTut_RequestNavigate">- Rex Tut</Hyperlink>
+                <Run Text="      "></Run>
+                <Hyperlink Click="hlHelp_Click" >- Help</Hyperlink>
+                <Run Text="      "></Run>
+                <Hyperlink NavigateUri="mailto:zhanghanyang2002@gmail.com" RequestNavigate="hlTut_RequestNavigate">- Contact Me</Hyperlink>
+            </TextBlock>
+            
+            <StackPanel Grid.Row="4" Orientation="Horizontal" Height="30" HorizontalAlignment="Right" VerticalAlignment="Stretch">
+                <Button x:Name="btnAddRule" Command="{x:Static local:RexReplaceCommands.AddRule}" >
+                </Button>
+                <Button x:Name="btnDeleteRule" Command="{x:Static local:RexReplaceCommands.DeleteRule}"  >
+                </Button>
+                <Button x:Name="btnRunRules" Command="{x:Static local:RexReplaceCommands.Run}" >
+                </Button>
+            </StackPanel>
+        </Grid>
+        
+        <GridSplitter Grid.Column="1" Width="2" VerticalAlignment="Stretch" HorizontalAlignment="Center" ></GridSplitter>
+        <DockPanel Grid.Column="2" Margin="0 0 0 7" HorizontalAlignment="Stretch" >
+
+            <TextBlock  DockPanel.Dock="Top">Result:</TextBlock>
+            <TextBlock x:Name="txtLineCount" DockPanel.Dock="Bottom" Text="Line Count: " Style="{StaticResource statustext}" Margin="5,0"></TextBlock>
+            <TextBox x:Name="outputbox" Style="{StaticResource commontext}" DockPanel.Dock="Top" Margin="5" Background="#ffddeeee" IsReadOnly="True"></TextBox>
+        </DockPanel>
+    </Grid>
+</Window>
