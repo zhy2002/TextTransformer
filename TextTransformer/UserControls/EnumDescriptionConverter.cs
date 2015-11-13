@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Windows.Data;
 
-namespace RexReplace.GUI.UserControls
+namespace TextTransformer.UserControls
 {
     /// <summary>
     /// http://stackoverflow.com/questions/3985876/wpf-binding-a-listbox-to-an-enum-displaying-the-description-attribute

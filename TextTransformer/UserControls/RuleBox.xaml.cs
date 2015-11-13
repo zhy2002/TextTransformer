@@ -13,10 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using RexReplace.GUI.Logic;
+using TextTransformer.Logic;
 using System.ComponentModel;
+using ZCL.RTScript;
+using ZCL.RTScript.Logic.Expression.Literal;
 
-namespace RexReplace.GUI.UserControls
+namespace TextTransformer.UserControls
 {
     /// <summary>
     /// Properties for RuleBox.xaml which read from or write the relevant UI elements.
@@ -26,9 +28,8 @@ namespace RexReplace.GUI.UserControls
         public RuleBox()
         {
             InitializeComponent();
-            RegOptions = RegexOptions.None;
-            this.SortingOption = SortingOptions.None;
-            this.DiscardUnmatchText = false;
+
+            RuleData = null;
         }
 
         private int index = 0;
@@ -43,50 +44,9 @@ namespace RexReplace.GUI.UserControls
             set
             {
                 index = value;
-                stext.Text = "Substitute " + (index + 1);
-                mtext.Text = "Match " + (index + 1);
-                sortingtext.Text = "Sorting Group " + (index + 1);
-            }
-        }
-
-        /// <summary>
-        /// Get or set the replace rule represented by this control.
-        /// </summary>
-        public Rule ReplaceRule
-        {
-            get
-            {
-                if (mbox.Text == string.Empty)
-                {
-                    throw new RuleException("Match expression is invalid.");
-                }
-
-                int sortingGroup;
-                if (!int.TryParse(sortingbox.Text, out sortingGroup) || sortingGroup < 0)
-                {
-                    throw new RuleException("Sorting expression is invalid.");
-                }
-                return new Rule(mbox.Text, sbox.Text, RegOptions) { SortingOptions = this.SortingOption, SortingGroup = sortingGroup, DiscardUnmatchedText = this.DiscardUnmatchText };
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    sbox.Text = string.Empty;
-                    mbox.Text = string.Empty;
-                    sortingbox.Text = "0";
-                    RegOptions = RegexOptions.None;
-                    this.DiscardUnmatchText = false;
-                    this.SortingOption = SortingOptions.None;
-                    return;
-                }
-                sbox.Text = value.Replacement;
-                mbox.Text = value.Match.ToString();
-                sortingbox.Text = value.SortingGroup.ToString();
-                RegOptions = value.RuleOptions;
-                this.DiscardUnmatchText = value.DiscardUnmatchedText;
-                this.SortingOption = value.SortingOptions;
+                matchText.Text = "Match " + (index + 1);
+                replaceText.Text = "Replace " + (index + 1);
+                mergeText.Text = "Merge " + (index + 1);
             }
         }
 
@@ -96,36 +56,56 @@ namespace RexReplace.GUI.UserControls
             set;
         }
 
-        public bool DiscardUnmatchText
+        public MatchType MatchType
         {
             get;
             set;
         }
 
-        private SortingOptions _sorOption;
-
-        public SortingOptions SortingOption
+        /// <summary>
+        /// Get or set the replace rule represented by this control.
+        /// </summary>
+        public RTRuleData RuleData
         {
             get
             {
-                return _sorOption;
+                if (matchText.Text == string.Empty)
+                {
+                    throw new ReplaceException("Match expression cannot be empty.");
+                }
+
+                RuleOptions ruleOptions = new RuleOptions();
+                ruleOptions.MatchType = this.MatchType;
+                ruleOptions.RegexOptions = this.RegOptions;
+                RTRuleData ruleData = new RTRuleData(matchText.Text, replaceText.Text, mergeText.Text, ruleOptions);
+                return ruleData;
             }
 
             set
             {
-                _sorOption = value;
-                if (_sorOption == SortingOptions.None)
-                {
-                    sortingbox.IsEnabled = false;
-                    sortingtext.ToolTip = "Enable sorting by selecting an option in the context menu.";
+                String matchExpression = string.Empty;
+                String replaceExpression = "[{0}]";
+                String mergeExpression = "(merge)";
+                RegexOptions regOptions = RegexOptions.None;
+                MatchType matchType = MatchType.Group;
+
+                if (value != null) {
+                    matchExpression = value.MatchExpression;
+                    replaceExpression = value.TemplateExpression;
+                    mergeExpression = value.MergeExpression;
+                    regOptions = value.RuleOptions.RegexOptions;
+                    matchType = value.RuleOptions.MatchType;
                 }
-                else
-                {
-                    sortingbox.IsEnabled = true;
-                    sortingtext.ToolTip = null;
-                }
+
+                matchText.Text = matchExpression;
+                replaceText.Text = replaceExpression;
+                mergeText.Text = mergeExpression;
+                this.MatchType = matchType;
+                this.RegOptions = regOptions;
             }
         }
+
+
 
     }
 

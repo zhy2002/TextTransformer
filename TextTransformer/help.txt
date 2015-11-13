@@ -1,4 +1,4 @@
-﻿Product:        RexReplace v1.0
+﻿Product:        TextTransformer v1.0
 Description:    A simple text transformation tool based on regular expression matching and text replacement with limited text transformation expression support.
 Author:         Hanyang Zhang
 Email:          zhanghanyang2002@gmail.com

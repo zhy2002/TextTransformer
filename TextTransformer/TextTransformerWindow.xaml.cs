@@ -15,19 +15,20 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 
-using RexReplace.GUI.Logic;
-using RexReplace.GUI.UserControls;
-using Regtransf.GUI;
+using TextTransformer.Logic;
+using TextTransformer.UserControls;
+using ZCL.RTScript;
+using ZCL.RTScript.Logic.Expression.Literal;
 
 
-namespace RexReplace.GUI
+namespace TextTransformer
 {
     /// <summary>
     /// Handel events for MainWindow.xaml.
     /// </summary>
-    public partial class RexReplaceWindow : Window
+    public partial class TextTransformerWindow : Window
     { 
-        public RexReplaceWindow()
+        public TextTransformerWindow()
         {
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             InitializeComponent();
@@ -45,26 +46,16 @@ namespace RexReplace.GUI
                 foreach (ListViewItem item in RuleList.Items)
                 {
                     RuleBox rb = item.Content as RuleBox;
-                    var mbox = rb.FindName("mbox") as TextBox;
-                    var sortingbox = rb.FindName("sortingbox") as TextBox;
+                    var matchText = rb.FindName("matchText") as TextBox;
                     try
                     {
-                        rs.AddRule(rb.ReplaceRule);
-                        mbox.Style = Resources["commontext"] as Style;
-                        sortingbox.Style = Resources["commontext"] as Style;
+                        rs.AddRule(rb.RuleData);
+                        matchText.Style = Resources["commontext"] as Style;
                     }
-                    catch (Exception ex)
+                    catch (ReplaceException)
                     {
-                        if (ex.Message == "group")
-                        {
-                            sortingbox.Style = Resources["errortext"] as Style;
-                            sortingbox.GotFocus += ruleBoxField_GotFocus; //will unbind itself when called.
-                        }
-                        else
-                        {
-                            mbox.Style = Resources["errortext"] as Style;
-                            mbox.GotFocus += ruleBoxField_GotFocus;
-                        }
+                        matchText.Style = Resources["errortext"] as Style;
+                        matchText.GotFocus += ruleBoxField_GotFocus;
                         error = true;
                         break;
                     }
@@ -87,13 +78,13 @@ namespace RexReplace.GUI
         /// Append a rule in the list view.
         /// </summary>
         /// <param name="rule"></param>
-        private void AppendRule(Rule rule)
+        private void AppendRule(RTRuleData rule)
         {
             ListViewItem lvi = new ListViewItem();
             lvi.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch;
             lvi.VerticalContentAlignment = System.Windows.VerticalAlignment.Stretch;
             var ruleui = new RuleBox();
-            ruleui.ReplaceRule = rule;
+            ruleui.RuleData = rule;
             lvi.Content = ruleui;
             var ruleCollection = RuleList.Items;
             int count = ruleCollection.Count;
@@ -166,8 +157,6 @@ namespace RexReplace.GUI
             e.Handled = true;
         }
 
-       
-
         private void RunCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var ruleset = CurrentRuleSet;
@@ -183,7 +172,7 @@ namespace RexReplace.GUI
                 var text = outputbox.Text ?? String.Empty;
                 txtLineCount.Text = "Line Count: " + text.Split('\n').Length.ToString() + ", Char Count: " + text.Length;
             }
-            catch (RuleException ex)
+            catch (ReplaceException ex)
             {
                 MessageBox.Show(ex.Message);
 
@@ -198,6 +187,9 @@ namespace RexReplace.GUI
                     sbox.Focus();
                     sbox.Select(sourceIndex, 1);
                 }
+            }
+            catch (RTParsingException ex2) {
+                MessageBox.Show(ex2.Message);
             }
         }
 
@@ -268,13 +260,9 @@ namespace RexReplace.GUI
             RegexOptions temp;
             foreach (FrameworkElement it in ctxMenu.Items)
             {
-                if (it == miSorting)
+                if (it == miMatchType)
                 {
-                    cbSorting.SelectedItem = rb.SortingOption;
-                }
-                else if (it == miDiscard)
-                {
-                    miDiscard.IsChecked = rb.DiscardUnmatchText;
+                    cbMatchType.SelectedItem = rb.MatchType;
                 }
                 else
                 {
@@ -301,13 +289,9 @@ namespace RexReplace.GUI
             RegexOptions temp;
             foreach (var it in ctxMenu.Items)
             {
-                if (it == miSorting)
+                if (it == miMatchType)
                 {
-                    rb.SortingOption = (SortingOptions)cbSorting.SelectedItem;
-                }
-                else if (it == miDiscard)
-                {
-                    rb.DiscardUnmatchText = miDiscard.IsChecked;
+                    rb.MatchType = (MatchType)cbMatchType.SelectedItem;
                 }
                 else
                 {
@@ -334,7 +318,7 @@ namespace RexReplace.GUI
             helpWindow.ShowDialog();
         }
 
-        private void cbSorting_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cbMatchType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ctxMenu.IsOpen)
             {
