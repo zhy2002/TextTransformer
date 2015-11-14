@@ -1,3 +1,0 @@
-1. Hook GUI with backend.
-2. Enable literal replace operations (e.g. {sum 1,2}) in merge script as well.
-3. Allow user to define own literal replace operations.

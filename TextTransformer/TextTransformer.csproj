@@ -115,7 +115,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="help.txt" />
+    <Content Include="help.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="app.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

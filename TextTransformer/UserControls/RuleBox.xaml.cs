@@ -44,9 +44,9 @@ namespace TextTransformer.UserControls
             set
             {
                 index = value;
-                matchText.Text = "Match " + (index + 1);
-                replaceText.Text = "Replace " + (index + 1);
-                mergeText.Text = "Merge " + (index + 1);
+                matchTextHeader.Text = "Match " + (index + 1);
+                tabItemReplace.Header = "Replace " + (index + 1);
+                tabItemMerge.Header = "Merge " + (index + 1);
             }
         }
 
@@ -85,7 +85,7 @@ namespace TextTransformer.UserControls
             {
                 String matchExpression = string.Empty;
                 String replaceExpression = "[{0}]";
-                String mergeExpression = "(merge)";
+                String mergeExpression = "@{(merge)@}";
                 RegexOptions regOptions = RegexOptions.None;
                 MatchType matchType = MatchType.Group;
 

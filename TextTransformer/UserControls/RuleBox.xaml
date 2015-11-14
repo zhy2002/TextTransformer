@@ -26,18 +26,18 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         
-        <TextBlock Style="{StaticResource labeltext}" x:Name="mtext" Grid.Row="0" Text="Match 1" >
+        <TextBlock Style="{StaticResource labeltext}" x:Name="matchTextHeader" Grid.Row="0" Text="Match 1" >
         </TextBlock>
         
         <TextBox Style="{StaticResource ruletextbox}" x:Name="matchText"  Grid.Row="1" ToolTip="A regular expression used to capture matches"></TextBox>
         
         <TabControl  Grid.Row="2" Margin="0,2,0,0" >
 
-            <TabItem Header="Replace 1">
+            <TabItem x:Name="tabItemReplace" Header="Replace 1">
                 <TextBox  Style="{StaticResource ruletextbox}" AcceptsReturn="True" AcceptsTab="True" x:Name="replaceText" Text="[{0}]" ToolTip="A script that transforms each match"></TextBox>
             </TabItem>
-            
-            <TabItem Header="Merge 1">
+
+            <TabItem x:Name="tabItemMerge" Header="Merge 1">
                 <TextBox Style="{StaticResource ruletextbox}" AcceptsReturn="True" AcceptsTab="True" x:Name="mergeText" Text="@{(merge)@}" ToolTip="A script used to merge transformed matches and unmatched text">
                 </TextBox>
             </TabItem>

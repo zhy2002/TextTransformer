@@ -1,4 +1,19 @@
-﻿1. Literal and Expression List
+﻿Overview
+==========
+
+RTScript is a simple scripting language I created based on Lisp and JavaScript. It can be embedded in plain text and generate dynamic content in place. In another word it is a template engine.
+There are two places in TextTransformer you can use RTScript:
+
+
+1. In the "replace" text area: in this context you can use the items in a match
+2. In the "merge" text area: in this context you can use everything available in the merge stage.  
+
+Below is a description of the script language.
+
+
+to be provided...
+
+1. Literal and Expression List
 An RT template converts an RTMatch object into a string. It is a block of script executed by the RT interpreter.
 There are 2 lexical contexts in RT template, namely Literal and Expression List.
 By default we are in Literal context, and everything will be sent to the output as is. E.g. the following script:

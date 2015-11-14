@@ -16,8 +16,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{1C4F6E70-A7DC-47E7-A993-7B60A4B77AFE}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
+		ZCL.Calculator\README_CALCULATOR.md = ZCL.Calculator\README_CALCULATOR.md
+		ZCL.RTScript\README_RTSCRIPT.md = ZCL.RTScript\README_RTSCRIPT.md
 		screenshot1.png = screenshot1.png
-		todo.txt = todo.txt
+		TODO.md = TODO.md
 	EndProjectSection
 EndProject
 Global
