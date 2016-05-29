@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using ZCL.RTScript.Logic;
+using ZCL.RTScript.Logic.Expression.Literal;
 
 /// <summary>
 /// Top level API classes are put in this namespace.
@@ -92,8 +93,15 @@ namespace ZCL.RTScript
         public bool ExecuteNext()
         {
             if (NextRuleIndex == NO_RULE_GIVEN) return false;
-
-            _result = this._rules[NextRuleIndex].Execute(_result);
+            try 
+            { 
+                _result = this._rules[NextRuleIndex].Execute(_result);
+            }
+            catch (ReplaceException ex) 
+            {
+                ex.RuleId = NextRuleIndex + 1;
+                throw; 
+            }
             NextRuleIndex++;
             return NextRuleIndex != 0;
         }

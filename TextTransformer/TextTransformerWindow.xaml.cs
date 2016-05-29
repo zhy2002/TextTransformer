@@ -183,7 +183,7 @@ namespace TextTransformer
                 {
                     ruleId--;
                     RuleBox rb = (RuleList.Items[ruleId] as ListViewItem).Content as RuleBox;
-                    var sbox = rb.FindName("sbox") as TextBox;
+                    var sbox = rb.FindName("replaceText") as TextBox;
                     sbox.Focus();
                     sbox.Select(sourceIndex, 1);
                 }
